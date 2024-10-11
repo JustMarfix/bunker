@@ -32,7 +32,7 @@ impl ProxyHttp for LB {
         Self::CTX: Send + Sync,
     {
         for filter in &self.config.filters {
-             if filter.mode == BodySubstr && !_session.is_body_empty() {
+             if filter.mode == BodySubstr && _session.is_body_empty() {
                  match _session.read_request_body().await {
                      Ok(body_opt) => {
                          if filter.aho_corasick.is_match(str::from_utf8(&body_opt.unwrap()).unwrap()) {
