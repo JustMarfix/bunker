@@ -1,0 +1,11 @@
+services:
+  - listen: "127.0.0.1:5555"
+    upstream: "127.0.0.1:8080"
+    proto: "http"
+    filters:
+      - mode: BodySubstr
+        regex: false
+        substr: "meow"
+      - mode: UrlSubstr
+        regex: false
+        substr: "meow"
