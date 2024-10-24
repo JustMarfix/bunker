@@ -35,6 +35,9 @@ impl ProxyHttp for LB {
              if filter.mode == BodySubstr && !_session.is_body_empty() {
                  match _session.read_request_body().await {
                      Ok(body_opt) => {
+                         if body_opt == None {
+                             return Ok(false);
+                         }
                          if filter.aho_corasick.is_match(str::from_utf8(&body_opt.unwrap()).unwrap()) {
                              _session.respond_error(403).await?;
                              return Ok(false)
