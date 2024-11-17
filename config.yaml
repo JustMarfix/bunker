@@ -8,4 +8,10 @@ services:
         substr: "meow"
       - mode: UrlSubstr
         regex: false
-        substr: "meow"
+        substr: "meoow"
+      - mode: HeaderExists
+        regex: false
+        substr: "lolkek"
+      - mode: HeaderSubstr
+        regex: false
+        substr: "lolmeow"

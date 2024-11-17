@@ -1,4 +1,4 @@
-use crate::config::Modes::{BodySubstr, UrlSubstr};
+use crate::config::Modes::*;
 use crate::config::Service;
 use async_trait::async_trait;
 use pingora::prelude::*;
@@ -47,6 +47,16 @@ impl ProxyHttp for LB {
                  }
              } else if filter.mode == UrlSubstr {
                  if filter.aho_corasick.is_match(_session.req_header().uri.path()) {
+                     _session.respond_error(403).await?;
+                     return Ok(false)
+                 }
+             } else if filter.mode == HeaderExists {
+                 if _session.req_header().headers.iter().any(|x| &x.0.to_string() == &filter.substr) {
+                     _session.respond_error(403).await?;
+                     return Ok(false)
+                 }
+             } else if filter.mode == HeaderSubstr {
+                 if _session.req_header().headers.iter().any(|x| filter.aho_corasick.is_match(x.1.to_str().unwrap())) {
                      _session.respond_error(403).await?;
                      return Ok(false)
                  }
